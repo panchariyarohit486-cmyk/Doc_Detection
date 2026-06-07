@@ -8,7 +8,7 @@ A fine-tuned **YOLOv11** model for detecting and localizing document layout elem
 
 Upload a document page image and get instant bounding box predictions with class labels and confidence scores.
 
-Doc_Detection/model/Graphs/train_batch0.jpg
+![Val Predictions](model/Graphs/val_batch0_pred.jpg)
 
 ---
 
