@@ -112,10 +112,9 @@ pip install -r requirements.txt
 
 ### 4. Download model weights
 
-Place `best.pt` inside `model/weights/`:
+Place `best.pt` 
 
-```
-model/weights/best.pt
+
 ```
 
 > If weights are hosted externally, download with:
@@ -146,16 +145,6 @@ print(results)
 ```
 
 ---
-
-## 🔧 Configuration
-
-Edit `config/config.yaml` to adjust model settings:
-
-```yaml
-model:
-  weights_path: model/weights/best.pt
-  confidence: 0.48
-  iou_threshold: 0.45
 
 upload:
   max_size_mb: 10
@@ -212,6 +201,4 @@ Annotations cover bounding boxes across varied document layouts.
 
 ---
 
-## 📄 License
 
-MIT License — feel free to use, modify, and distribute.
