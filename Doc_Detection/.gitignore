@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+venv/
+.env
+.DS_Store
+
+# uploads & outputs (runtime-generated)
+uploads/
+static/outputs/
+
+# model weights (large files — use Git LFS or direct download)
+runs/
+*.pt

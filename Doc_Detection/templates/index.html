@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DocDetect — Document Layout Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- ── GRID BACKGROUND ───────────────────────────────────────────── -->
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <!-- ── HEADER ────────────────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="logo">
+      <span class="logo-bracket">[</span>DocDetect<span class="logo-bracket">]</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#" class="nav-link active" data-view="detector">Detector</a>
+      <a href="#" class="nav-link" data-view="model">Model Info</a>
+    </nav>
+    <div class="header-badge">
+      <span class="badge-dot"></span>
+      <span class="badge-text">YOLO11 • Live</span>
+    </div>
+  </header>
+
+  <!-- ── MAIN ──────────────────────────────────────────────────────── -->
+  <main class="main-container">
+
+    <!-- ─ DETECTOR VIEW ─────────────────────────────────────────── -->
+    <section id="view-detector" class="view active">
+
+      <!-- Hero -->
+      <div class="hero">
+        <h1 class="hero-title">
+          Document<br/>
+          <em>Layout</em><br/>
+          Detection
+        </h1>
+        <p class="hero-sub">
+          Built on a fine-tuned YOLO11n model that finds<br/>
+          <strong>text blocks</strong>, <strong>tables</strong>, and <strong>figures</strong>
+          in document images — hits around 97% mAP50 on our test set.
+        </p>
+      </div>
+
+      <!-- Upload zone -->
+      <div class="upload-section">
+        <div class="upload-zone" id="dropZone">
+          <div class="upload-icon">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="8" y="8" width="48" height="48" rx="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M32 20V44M20 32H44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="upload-label">Drop your document image here</p>
+          <p class="upload-sub">PNG, JPG, JPEG, WEBP — up to 16 MB</p>
+          <button class="btn-upload" id="browseBtn">Browse Files</button>
+          <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.webp,.bmp" hidden />
+        </div>
+
+        <!-- Confidence slider -->
+        <div class="controls-row">
+          <label class="ctrl-label">
+            Confidence Threshold
+            <span class="ctrl-val" id="confVal">50%</span>
+          </label>
+          <input type="range" id="confSlider" min="10" max="95" value="50" class="slider" />
+        </div>
+
+        <button class="btn-detect" id="detectBtn" disabled>
+          <span class="btn-text">Run Detection</span>
+          <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- Results -->
+      <div class="results-section" id="resultsSection" hidden>
+
+        <!-- Stats bar -->
+        <div class="stats-bar" id="statsBar"></div>
+
+        <!-- Image comparison -->
+        <div class="compare-grid">
+          <div class="compare-card">
+            <div class="card-label">Input</div>
+            <img id="inputPreview" class="result-img" src="" alt="Input image" />
+          </div>
+          <div class="compare-card highlight">
+            <div class="card-label">Detected</div>
+            <img id="outputPreview" class="result-img" src="" alt="Annotated output" />
+          </div>
+        </div>
+
+        <!-- Detection table -->
+        <div class="detection-table-wrap">
+          <div class="table-header">
+            <h3 class="table-title">Detection Log</h3>
+            <button class="btn-download" id="downloadBtn">↓ Save Result</button>
+          </div>
+          <table class="detection-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Class</th>
+                <th>Confidence</th>
+                <th>Box (x1, y1, x2, y2)</th>
+                <th>Size (w × h)</th>
+              </tr>
+            </thead>
+            <tbody id="detectionBody"></tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ─ MODEL INFO VIEW ───────────────────────────────────────── -->
+    <section id="view-model" class="view" hidden>
+      <div class="model-page">
+        <h2 class="section-title">How the Model Performs</h2>
+
+        <!-- Metric cards -->
+        <div class="metrics-grid" id="metricsGrid">
+          <div class="metric-card" style="--i:0">
+            <div class="metric-val">93.6%</div>
+            <div class="metric-name">Precision</div>
+          </div>
+          <div class="metric-card" style="--i:1">
+            <div class="metric-val">93.1%</div>
+            <div class="metric-name">Recall</div>
+          </div>
+          <div class="metric-card accent" style="--i:2">
+            <div class="metric-val">97.0%</div>
+            <div class="metric-name">mAP@50</div>
+          </div>
+          <div class="metric-card" style="--i:3">
+            <div class="metric-val">92.9%</div>
+            <div class="metric-name">mAP@50-95</div>
+          </div>
+        </div>
+
+        <!-- Training info -->
+        <div class="info-grid">
+          <div class="info-block">
+            <h3>Architecture</h3>
+            <ul>
+              <li>Base: <code>YOLO11n</code></li>
+              <li>Framework: Ultralytics</li>
+              <li>Image size: 640 × 640</li>
+              <li>Epochs: 10</li>
+              <li>Task: Object Detection</li>
+            </ul>
+          </div>
+          <div class="info-block">
+            <h3>Dataset</h3>
+            <ul>
+              <li>Source: Roboflow Universe</li>
+              <li>Project: <code>tft-id-mgv7w v2</code></li>
+              <li>Format: YOLOv11</li>
+              <li>Detects: text, tables, figures</li>
+            </ul>
+          </div>
+          <div class="info-block">
+            <h3>What It Can Find</h3>
+            <div id="classList" class="class-chips">
+              <span class="chip loading">Loading…</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline diagram -->
+        <div class="pipeline">
+          <h3>How It Works</h3>
+          <div class="pipeline-steps">
+            <div class="p-step">Upload Image</div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">Resize to 640px</div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">YOLO11n Backbone</div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">NMS Filter</div>
+            <div class="p-arrow">→</div>
+            <div class="p-step">Annotated Result</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── LOADING OVERLAY ───────────────────────────────────────────── -->
+  <div class="overlay" id="overlay" hidden>
+    <div class="spinner-wrap">
+      <div class="spinner"></div>
+      <p class="spinner-text">Running detection…</p>
+    </div>
+  </div>
+
+  <!-- ── TOAST ─────────────────────────────────────────────────────── -->
+  <div class="toast" id="toast"></div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
